@@ -1,0 +1,25 @@
+{
+  "name": "google-docs-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP Server for Google Docs API integration",
+  "type": "module",
+  "main": "server.js",
+  "bin": {
+    "google-docs-mcp": "./dist/server.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "get-token": "tsx scripts/get-oauth-token.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "googleapis": "^144.0.0",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.6",
+    "tsx": "^4.19.2",
+    "typescript": "^5.3.3"
+  }
+}

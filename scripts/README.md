@@ -5,7 +5,7 @@
 First ensure you have all dependencies installed:
 
 ```bash
-yarn install
+npm install
 ```
 
 And your `LANGCHAIN_API_KEY`, `LANGGRAPH_API_URL` environment variables set:
@@ -31,7 +31,7 @@ If you don't want to post to Slack, the script will print the output to the cons
 This script will fetch all scheduled runs and either send them to Slack or print them to the console.
 
 ```bash
-yarn get:scheduled_runs
+npm run get:scheduled_runs
 ```
 
 ### Get all used links
@@ -39,7 +39,7 @@ yarn get:scheduled_runs
 This script will fetch and log all links which are currently scheduled, or interrupted and awaiting human intervention.
 
 ```bash
-yarn get:used_links
+npm run get:used_links
 ```
 
 ### Generate Demo Post
@@ -47,7 +47,7 @@ yarn get:used_links
 This script will invoke the graph to generate a post. It defaults to a LangChain blog post, and typically used to demonstrate how the Social Media Agent works.
 
 ```bash
-yarn generate_post
+npm run generate_post
 ```
 
 ### Delete Run(s) & Thread(s)
@@ -55,7 +55,7 @@ yarn generate_post
 This script will delete runs and associated threads. It requires setting the run ID(s) and thread ID(s) in the script.
 
 ```bash
-yarn graph:delete:run_thread
+npm run graph:delete:run_thread
 ```
 
 ### Backfill
@@ -63,7 +63,7 @@ yarn graph:delete:run_thread
 This script will backfill your deployment with links. It contains two functions, one for backfilling from Slack, and one for backfilling from a list of links. You'll need to uncomment one/both of the functions to use them.
 
 ```bash
-yarn graph:backfill
+npm run graph:backfill
 ```
 
 ### Create Cron
@@ -71,7 +71,7 @@ yarn graph:backfill
 This script will create a cron job to run the `ingest_data` graph.
 
 ```bash
-yarn cron:create
+npm run cron:create
 ```
 
 ### Delete Cron
@@ -79,7 +79,7 @@ yarn cron:create
 This script will delete a cron job.
 
 ```bash
-yarn cron:delete
+npm run cron:delete
 ```
 
 ### List Crons
@@ -87,5 +87,5 @@ yarn cron:delete
 This script will list all cron jobs.
 
 ```bash
-yarn cron:list
+npm run cron:list
 ```

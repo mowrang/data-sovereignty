@@ -64,7 +64,7 @@ cd social-media-agent
 ### Install dependencies:
 
 ```bash
-yarn install
+npm install
 ```
 
 ### Set environment variables.
@@ -120,7 +120,7 @@ Click [here](https://langchain-ai.github.io/langgraph/cloud/reference/cli/) to r
 To start the LangGraph server, run this script:
 
 ```bash
-yarn langgraph:in_mem:up
+npm run langgraph:in_mem:up
 ```
 
 Under the hood, this will execute the following command:
@@ -135,7 +135,7 @@ npx @langchain/langgraph-cli dev --port 54367
 Once the server is ready, you can execute the following command to generate a post:
 
 ```bash
-yarn generate_post
+npm run generate_post
 ```
 
 You may also modify this script to pass different URLs to generate posts for other content.
@@ -179,7 +179,7 @@ cd social-media-agent
 ### Install dependencies:
 
 ```bash
-yarn install
+npm install
 ```
 
 ### Set environment variables.
@@ -242,7 +242,7 @@ You'll need to follow these instructions if you plan on uploading media to Twitt
 
 6. Save. You'll then be given a `Client ID` and `Client Secret`. Set these as `TWITTER_CLIENT_ID` and `TWITTER_CLIENT_SECRET` in your `.env` file.
 
-Once done, run the `yarn start:auth` command to run the Twitter OAuth server. Open [http://localhost:3000](http://localhost:3000) in your browser, and click `Login with Twitter`.
+Once done, run the `npm run start:auth` command to run the Twitter OAuth server. Open [http://localhost:3000](http://localhost:3000) in your browser, and click `Login with Twitter`.
 
 After authorizing your account with the app, navigate to your terminal where you'll see a JSON object logged. Copy the `token` and `tokenSecret` values and set them as `TWITTER_USER_TOKEN` and `TWITTER_USER_TOKEN_SECRET` in your `.env` file.
 
@@ -280,7 +280,7 @@ You'll need to follow these instructions if you plan on posting to LinkedIn and 
 - `LINKEDIN_CLIENT_ID`
 - `LINKEDIN_CLIENT_SECRET`
 
-5. Run the `yarn start:auth` command to run the LinkedIn OAuth server. Open [http://localhost:3000](http://localhost:3000) in your browser, and click `Login with LinkedIn`.
+5. Run the `npm run start:auth` command to run the LinkedIn OAuth server. Open [http://localhost:3000](http://localhost:3000) in your browser, and click `Login with LinkedIn`.
 6. After logging in, copy the `access_token` and `sub` values from the objects logged to the terminal. Set these values as `LINKEDIN_ACCESS_TOKEN` (`access_token`) and `LINKEDIN_PERSON_URN` (`sub`) in your `.env` file.
 
 </details>
@@ -324,7 +324,7 @@ Ensure this is set as `GITHUB_TOKEN` in your `.env` file.
 Once all the setup steps have been completed, start your graph server by running:
 
 ```bash
-yarn langgraph:in_mem:up
+npm run langgraph:in_mem:up
 ```
 
 > [!NOTE]
@@ -335,7 +335,7 @@ Once the server is ready, you can execute the following command to generate a po
 (before doing this, you should edit the file so that the text only mode is set to false: `[TEXT_ONLY_MODE]: false` if using advanced setup mode)
 
 ```bash
-yarn generate_post
+npm run generate_post
 ```
 
 This will kick off a new run to generate a post on a [LangChain blog post](https://blog.langchain.dev/customers-appfolio/).
@@ -357,7 +357,7 @@ Before we get started, ensure you have the proper Slack integration setup, as de
 After editing, run the following command to create the cron:
 
 ```bash
-yarn cron:create
+npm run cron:create
 ```
 
 This will create a new cron job that will ingest links from Slack into your graph, once daily.

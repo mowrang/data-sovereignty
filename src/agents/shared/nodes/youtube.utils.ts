@@ -58,7 +58,7 @@ function getYouTubeClientFromUrl(): youtube_v3.Youtube {
 
   const youtubeClient = youtube({
     version: "v3",
-    auth,
+    auth: auth as any, // Type compatibility issue between different googleapis versions
   });
 
   return youtubeClient;

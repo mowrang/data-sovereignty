@@ -1,0 +1,31 @@
+# Dockerfile for Testing
+# Used for running unit tests and E2E tests in Docker
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apk add --no-cache \
+    curl \
+    bash
+
+# Copy package files
+COPY package*.json ./
+COPY tsconfig.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Build TypeScript
+RUN npm run build
+
+# Set test environment
+ENV NODE_ENV=test
+ENV TZ=America/Los_Angeles
+
+# Default command (can be overridden)
+CMD ["npm", "test"]

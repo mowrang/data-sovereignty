@@ -14,7 +14,7 @@ import { Client } from "@langchain/langgraph-sdk";
  *
  * @example
  * ```bash
- * yarn cron:list
+ * npm run cron:list
  * ```
  */
 async function listCrons() {

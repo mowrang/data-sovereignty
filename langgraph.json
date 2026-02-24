@@ -15,10 +15,22 @@
     "repurposer": "./src/agents/repurposer/index.ts:repurposerGraph",
     "curated_post_interrupt": "./src/agents/curated-post-interrupt/index.ts:curatedPostInterruptGraph",
     "ingest_repurposed_data": "./src/agents/ingest-repurposed-data/index.ts:graph",
-    "repurposer_post_interrupt": "./src/agents/repurposer-post-interrupt/index.ts:repurposerPostInterruptGraph"
+    "repurposer_post_interrupt": "./src/agents/repurposer-post-interrupt/index.ts:repurposerPostInterruptGraph",
+    "resume_agent": "./src/agents/resume-agent/resume-agent-graph.ts:resumeAgentGraph"
   },
   "env": ".env",
   "dependencies": ["."],
-  "dockerfile_lines": ["RUN npx -y playwright@1.49.1 install --with-deps"],
+  "dockerfile_lines": [
+    "RUN set -e && \\",
+    "  if [ -d mcp-google-docs ]; then \\",
+    "    echo 'Building MCP server...' && \\",
+    "    cd mcp-google-docs && \\",
+    "    npm ci --production=false && \\",
+    "    npm run build && \\",
+    "    echo 'MCP server built successfully'; \\",
+    "  else \\",
+    "    echo 'Warning: mcp-google-docs directory not found - skipping MCP build'; \\",
+    "  fi"
+  ],
   "image_distro": "bookworm"
 }

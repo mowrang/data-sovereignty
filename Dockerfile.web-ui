@@ -1,0 +1,56 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+# Install dependencies needed for building
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy package files
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY .npmrc ./
+
+# Install dependencies
+# Use --legacy-peer-deps to resolve peer dependency conflicts
+RUN npm ci --production=false --legacy-peer-deps
+
+# Copy web UI files
+COPY web-ui/ ./web-ui/
+
+# Copy source files needed by web UI server (for reading .resume-agent-context.json)
+COPY src/cli/ ./src/cli/
+
+# Copy auth server files (needed for auth-server container)
+COPY src/auth/ ./src/auth/
+COPY src/db/ ./src/db/
+COPY src/utils/ ./src/utils/
+COPY src/api/ ./src/api/
+COPY src/integrations/ ./src/integrations/
+COPY src/agents/ ./src/agents/
+COPY src/clients/ ./src/clients/
+COPY src/types/ ./src/types/
+
+# Copy .env.example for reference (actual env vars injected at runtime)
+COPY .env.full.example ./
+
+# Build TypeScript
+RUN npm run build
+
+# Debug: List build output
+RUN ls -la dist/ || echo "dist directory not found"
+RUN ls -la dist/web-ui/ || echo "dist/web-ui directory not found"
+
+# Verify build output exists
+RUN test -f dist/web-ui/server.js || (echo "Build failed: dist/web-ui/server.js not found" && ls -la dist/web-ui/ && exit 1)
+
+# Expose port
+EXPOSE 3001
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3001/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+
+# Start web UI server
+CMD ["node", "dist/web-ui/server.js"]

@@ -16,10 +16,11 @@
     "allowJs": true,
     "strict": true,
     "strictFunctionTypes": false,
+    "skipLibCheck": true,
     "outDir": "dist",
     "types": ["jest", "node"],
     "resolveJsonModule": true
   },
-  "include": ["**/*.ts", "**/*.js", "jest.setup.cjs"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["**/*.ts", "**/*.js", "jest.setup.cjs", "src/types/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", "infrastructure", "**/__tests__/**", "**/*.test.ts", "mcp-*", "mcp-data-sources"]
 }

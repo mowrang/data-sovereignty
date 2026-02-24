@@ -10,7 +10,7 @@ import { Client } from "@langchain/langgraph-sdk";
  * To find available cron IDs that can be deleted, first run the list-crons script:
  *
  * ```bash
- * yarn cron:list
+ * npm run cron:list
  * ```
  *
  * @async
@@ -20,7 +20,7 @@ import { Client } from "@langchain/langgraph-sdk";
  *
  * @example
  * ```bash
- * yarn cron:delete
+ * npm run cron:delete
  * ```
  */
 async function deleteCron() {

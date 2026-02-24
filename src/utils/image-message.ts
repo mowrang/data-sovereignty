@@ -32,7 +32,7 @@ export async function getImageMessageContents(
       }
       if (
         !mimeType ||
-        BLACKLISTED_MIME_TYPES.find((mt) => mimeType.startsWith(mt))
+        BLACKLISTED_MIME_TYPES.find((mt: string) => mimeType.startsWith(mt))
       ) {
         return [];
       }

@@ -19,7 +19,7 @@ import {
  *
  * @example
  * ```bash
- * yarn cron:create
+ * npm run cron:create
  * ```
  */
 async function createCron() {

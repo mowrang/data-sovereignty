@@ -1,0 +1,38 @@
+# Dockerfile for LangGraph API Server
+# Note: LangGraph CLI generates its own Dockerfile from langgraph.json
+# This is an alternative if you want more control
+
+FROM langchain/langgraphjs-api:20
+
+WORKDIR /deps/social-media-agent
+
+# Copy project files
+COPY . .
+
+# Build MCP server (as specified in langgraph.json)
+RUN if [ -d mcp-google-docs ]; then \
+      echo 'Building MCP server...' && \
+      cd mcp-google-docs && \
+      npm ci --production=false && \
+      npm run build && \
+      echo 'MCP server built successfully'; \
+    else \
+      echo 'Warning: mcp-google-docs directory not found - skipping MCP build'; \
+    fi
+
+# Install dependencies
+RUN npm ci --production=false --legacy-peer-deps
+
+# Expose LangGraph API port
+# Note: LangGraph API server runs on port 8000 by default (uvicorn)
+# We map host port 54367 to container port 8000 in docker-compose
+EXPOSE 8000
+
+# Health check - check port 8000 (actual server port)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=5 \
+  CMD node -e "require('http').get('http://localhost:8000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)}).on('error', () => process.exit(1))"
+
+# LangGraph CLI handles the server startup
+# Note: The --port flag may not work as expected with the base image
+# The server defaults to port 8000, which we map to 54367 in docker-compose
+CMD ["langgraphjs", "up", "--port", "8000"]

@@ -1,0 +1,33 @@
+version: "3.8"
+
+# Docker Compose for Web UI only
+# This assumes LangGraph API Server is running separately (via npm run langgraph:up)
+
+services:
+  web-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.web-ui
+    ports:
+      - "${WEB_UI_PORT:-3001}:3001"
+    environment:
+      # Connect to LangGraph API Server (running on host machine or separate container)
+      - LANGGRAPH_API_URL=${LANGGRAPH_API_URL:-http://host.docker.internal:54367}
+      - WEB_UI_PORT=3001
+      - WEB_UI_HOST=0.0.0.0
+    # Use host network mode to access localhost services
+    # Alternative: use host.docker.internal (works on Mac/Windows)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:3001/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped

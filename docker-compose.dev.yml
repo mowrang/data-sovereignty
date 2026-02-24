@@ -1,0 +1,154 @@
+# Development Environment
+# Usage: docker compose -f docker-compose.dev.yml up
+
+services:
+  postgres-dev:
+    image: postgres:15
+    container_name: resume-agent-postgres-dev
+    environment:
+      POSTGRES_DB: langgraph_dev
+      POSTGRES_USER: langgraph
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langgraph"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - resume-agent-dev
+
+  redis-dev:
+    image: redis:7-alpine
+    container_name: resume-agent-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_dev_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - resume-agent-dev
+
+  langgraph-api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.langgraph
+    container_name: resume-agent-langgraph-dev
+    ports:
+      - "54367:8000"  # Map host port 54367 to container port 8000 (LangGraph default)
+      - "9229:9229"
+    env_file:
+      - .env.dev
+    environment:
+      - NODE_ENV=development
+      - POSTGRES_HOST=postgres-dev
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=langgraph_dev
+      - POSTGRES_USER=langgraph
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - DATABASE_URI=postgresql://langgraph:${POSTGRES_PASSWORD:-changeme}@postgres-dev:5432/langgraph_dev
+      - REDIS_HOST=redis-dev
+      - REDIS_PORT=6379
+      - REDIS_URI=redis://redis-dev:6379
+      - LANGGRAPH_API_URL=http://localhost:54367
+      - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY:-${LANGSMITH_API_KEY:-}}
+    depends_on:
+      postgres-dev:
+        condition: service_healthy
+      redis-dev:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)}).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    networks:
+      - resume-agent-dev
+    restart: unless-stopped
+
+  auth-server-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.web-ui
+    container_name: resume-agent-auth-dev
+    command: ["node", "dist/src/auth/start-auth-server.js"]
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.dev
+    environment:
+      - NODE_ENV=development
+      - AUTH_SERVER_PORT=3000
+      - AUTH_SERVER_HOST=0.0.0.0
+      - POSTGRES_HOST=postgres-dev
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=langgraph_dev
+      - POSTGRES_USER=langgraph
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - REDIS_HOST=redis-dev
+      - REDIS_PORT=6379
+    depends_on:
+      postgres-dev:
+        condition: service_healthy
+      redis-dev:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - resume-agent-dev
+    restart: unless-stopped
+
+  web-ui-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.web-ui
+    container_name: resume-agent-web-ui-dev
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env.dev
+    environment:
+      - NODE_ENV=development
+      - WEB_UI_PORT=3001
+      - WEB_UI_HOST=0.0.0.0
+      - LANGGRAPH_API_URL=http://langgraph-api-dev:54367
+      - AUTH_SERVER_URL=http://auth-server-dev:3000
+    depends_on:
+      langgraph-api-dev:
+        condition: service_healthy
+      auth-server-dev:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:3001/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - resume-agent-dev
+    restart: unless-stopped
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:
+
+networks:
+  resume-agent-dev:
+    driver: bridge

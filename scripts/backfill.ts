@@ -21,7 +21,7 @@ import {
  *
  * @example
  * ```bash
- * yarn graph:backfill
+ * npm run graph:backfill
  * ```
  */
 export async function backfill() {

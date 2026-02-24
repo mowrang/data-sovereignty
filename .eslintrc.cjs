@@ -18,6 +18,7 @@ module.exports = {
     "node_modules",
     "dist",
     "dist-cjs",
+    "infrastructure",
     "*.js",
     "*.cjs",
     "*.d.ts",
