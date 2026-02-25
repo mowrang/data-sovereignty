@@ -51,3 +51,6 @@ output.txt
 *secrets*.md
 *credentials*.md
 *keys*.md
+
+# Files containing secrets - do not commit
+docs/DOCKER_ENV_TESTING.md
