@@ -4,7 +4,7 @@
 services:
   postgres-dev:
     image: postgres:15
-    container_name: resume-agent-postgres-dev
+    container_name: data-sovereignty-postgres-dev
     environment:
       POSTGRES_DB: langgraph_dev
       POSTGRES_USER: langgraph
@@ -19,11 +19,11 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - resume-agent-dev
+      - data-sovereignty-dev
 
   redis-dev:
     image: redis:7-alpine
-    container_name: resume-agent-redis-dev
+    container_name: data-sovereignty-redis-dev
     ports:
       - "6379:6379"
     volumes:
@@ -34,13 +34,13 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - resume-agent-dev
+      - data-sovereignty-dev
 
   langgraph-api-dev:
     build:
       context: .
       dockerfile: Dockerfile.langgraph
-    container_name: resume-agent-langgraph-dev
+    container_name: data-sovereignty-langgraph-dev
     ports:
       - "54367:8000"  # Map host port 54367 to container port 8000 (LangGraph default)
       - "9229:9229"
@@ -72,14 +72,14 @@ services:
       retries: 5
       start_period: 120s
     networks:
-      - resume-agent-dev
+      - data-sovereignty-dev
     restart: unless-stopped
 
   auth-server-dev:
     build:
       context: .
       dockerfile: Dockerfile.web-ui
-    container_name: resume-agent-auth-dev
+    container_name: data-sovereignty-auth-dev
     command: ["node", "dist/src/auth/start-auth-server.js"]
     ports:
       - "3000:3000"
@@ -107,14 +107,14 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - resume-agent-dev
+      - data-sovereignty-dev
     restart: unless-stopped
 
   web-ui-dev:
     build:
       context: .
       dockerfile: Dockerfile.web-ui
-    container_name: resume-agent-web-ui-dev
+    container_name: data-sovereignty-web-ui-dev
     ports:
       - "3001:3001"
     env_file:
@@ -142,7 +142,7 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - resume-agent-dev
+      - data-sovereignty-dev
     restart: unless-stopped
 
 volumes:
@@ -150,5 +150,5 @@ volumes:
   redis_dev_data:
 
 networks:
-  resume-agent-dev:
+  data-sovereignty-dev:
     driver: bridge

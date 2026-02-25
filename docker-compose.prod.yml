@@ -6,7 +6,7 @@ version: "3.8"
 services:
   postgres-prod:
     image: postgres:15
-    container_name: resume-agent-postgres-prod
+    container_name: data-sovereignty-postgres-prod
     environment:
       POSTGRES_DB: langgraph_prod
       POSTGRES_USER: langgraph
@@ -21,12 +21,12 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - resume-agent-prod
+      - data-sovereignty-prod
     restart: always
 
   redis-prod:
     image: redis:7-alpine
-    container_name: resume-agent-redis-prod
+    container_name: data-sovereignty-redis-prod
     ports:
       - "6381:6379" # Different port to avoid conflicts
     volumes:
@@ -46,14 +46,14 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - resume-agent-prod
+      - data-sovereignty-prod
     restart: always
 
   langgraph-api-prod:
     build:
       context: .
       dockerfile: Dockerfile.langgraph
-    container_name: resume-agent-langgraph-prod
+    container_name: data-sovereignty-langgraph-prod
     ports:
       - "54369:54367" # Different port to avoid conflicts
     env_file:
@@ -81,14 +81,14 @@ services:
       retries: 3
       start_period: 40s
     networks:
-      - resume-agent-prod
+      - data-sovereignty-prod
     restart: always
 
   auth-server-prod:
     build:
       context: .
       dockerfile: Dockerfile.web-ui
-    container_name: resume-agent-auth-prod
+    container_name: data-sovereignty-auth-prod
     command: ["node", "dist/src/auth/auth-server.js"]
     ports:
       - "3004:3000" # Different port to avoid conflicts
@@ -117,14 +117,14 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - resume-agent-prod
+      - data-sovereignty-prod
     restart: always
 
   web-ui-prod:
     build:
       context: .
       dockerfile: Dockerfile.web-ui
-    container_name: resume-agent-web-ui-prod
+    container_name: data-sovereignty-web-ui-prod
     ports:
       - "3005:3001" # Different port to avoid conflicts
     env_file:
@@ -152,7 +152,7 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - resume-agent-prod
+      - data-sovereignty-prod
     restart: always
 
 volumes:
@@ -160,5 +160,5 @@ volumes:
   redis_prod_data:
 
 networks:
-  resume-agent-prod:
+  data-sovereignty-prod:
     driver: bridge

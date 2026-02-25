@@ -6,7 +6,7 @@ version: "3.8"
 services:
   postgres-staging:
     image: postgres:15
-    container_name: resume-agent-postgres-staging
+    container_name: data-sovereignty-postgres-staging
     environment:
       POSTGRES_DB: langgraph_staging
       POSTGRES_USER: langgraph
@@ -21,11 +21,11 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - resume-agent-staging
+      - data-sovereignty-staging
 
   redis-staging:
     image: redis:7-alpine
-    container_name: resume-agent-redis-staging
+    container_name: data-sovereignty-redis-staging
     ports:
       - "6380:6379" # Different port to avoid conflicts
     volumes:
@@ -36,13 +36,13 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - resume-agent-staging
+      - data-sovereignty-staging
 
   langgraph-api-staging:
     build:
       context: .
       dockerfile: Dockerfile.langgraph
-    container_name: resume-agent-langgraph-staging
+    container_name: data-sovereignty-langgraph-staging
     ports:
       - "54368:54367" # Different port to avoid conflicts
     env_file:
@@ -69,14 +69,14 @@ services:
       retries: 3
       start_period: 40s
     networks:
-      - resume-agent-staging
+      - data-sovereignty-staging
     restart: unless-stopped
 
   auth-server-staging:
     build:
       context: .
       dockerfile: Dockerfile.web-ui
-    container_name: resume-agent-auth-staging
+    container_name: data-sovereignty-auth-staging
     command: ["node", "dist/src/auth/auth-server.js"]
     ports:
       - "3002:3000" # Different port to avoid conflicts
@@ -104,14 +104,14 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - resume-agent-staging
+      - data-sovereignty-staging
     restart: unless-stopped
 
   web-ui-staging:
     build:
       context: .
       dockerfile: Dockerfile.web-ui
-    container_name: resume-agent-web-ui-staging
+    container_name: data-sovereignty-web-ui-staging
     ports:
       - "3003:3001" # Different port to avoid conflicts
     env_file:
@@ -139,7 +139,7 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - resume-agent-staging
+      - data-sovereignty-staging
     restart: unless-stopped
 
 volumes:
@@ -147,5 +147,5 @@ volumes:
   redis_staging_data:
 
 networks:
-  resume-agent-staging:
+  data-sovereignty-staging:
     driver: bridge

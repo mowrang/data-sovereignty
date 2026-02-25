@@ -3,13 +3,7 @@ index.js
 index.d.ts
 node_modules
 dist
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-yarn-error.log
+npm-debug.log*
 
 .turbo
 **/.turbo
@@ -32,9 +26,22 @@ src/clients/reddit/.secrets/
 # LangGraph API
 .langgraph_api
 
+# Resume agent context (thread ID + doc ID for "create for JD")
+.resume-agent-context.json
+
 __pycache__/
 .mypy_cache/
 .ruff_cache/
 
 # macOS
 .DS_Store
+
+# Test coverage
+coverage/
+*.lcov
+.nyc_output/
+
+# Temporary files
+docker-build.log
+output.txt
+*.tmp

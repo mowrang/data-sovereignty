@@ -24,7 +24,7 @@ echo ""
 echo "2️⃣  Granting PostgreSQL permissions for LangGraph monitoring..."
 
 # Step 2: Grant permissions as postgres superuser
-CONTAINER_NAME="resume-agent-postgres-dev"
+CONTAINER_NAME="data-sovereignty-postgres-dev"
 DB_NAME="langgraph_dev"
 DB_USER="langgraph"
 

@@ -5,7 +5,7 @@
 
 set -e
 
-CONTAINER_NAME="resume-agent-langgraph-dev"
+CONTAINER_NAME="data-sovereignty-langgraph-dev"
 
 echo "=========================================="
 echo "LangGraph Port Check"

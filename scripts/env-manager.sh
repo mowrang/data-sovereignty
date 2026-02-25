@@ -92,12 +92,12 @@ case "$ENV" in
                 docker exec -it "$CONTAINER" /bin/sh
                 ;;
             db:shell)
-                CONTAINER="resume-agent-postgres-${ENV}"
+                CONTAINER="data-sovereignty-postgres-${ENV}"
                 echo -e "${GREEN}Opening PostgreSQL shell in ${CONTAINER}...${NC}"
                 docker exec -it "$CONTAINER" psql -U langgraph -d "langgraph_${ENV}"
                 ;;
             db:init)
-                CONTAINER="resume-agent-web-ui-${ENV}"
+                CONTAINER="data-sovereignty-web-ui-${ENV}"
                 echo -e "${GREEN}Initializing database schema in ${ENV}...${NC}"
                 docker exec -it "$CONTAINER" npm run db:init
                 ;;

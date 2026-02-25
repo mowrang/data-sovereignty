@@ -24,12 +24,12 @@ function print_header() {
 function check_services() {
     echo -e "${YELLOW}Checking if services are running...${NC}"
     
-    if ! docker ps | grep -q "resume-agent-postgres-dev"; then
+    if ! docker ps | grep -q "data-sovereignty-postgres-dev"; then
         echo -e "${RED}❌ PostgreSQL is not running${NC}"
         return 1
     fi
     
-    if ! docker ps | grep -q "resume-agent-redis-dev"; then
+    if ! docker ps | grep -q "data-sovereignty-redis-dev"; then
         echo -e "${RED}❌ Redis is not running${NC}"
         return 1
     fi
@@ -44,7 +44,7 @@ function wait_for_services() {
     
     # Check PostgreSQL
     for i in {1..30}; do
-        if docker exec resume-agent-postgres-dev pg_isready -U langgraph > /dev/null 2>&1; then
+        if docker exec data-sovereignty-postgres-dev pg_isready -U langgraph > /dev/null 2>&1; then
             echo -e "${GREEN}✅ PostgreSQL is ready${NC}"
             break
         fi
@@ -57,7 +57,7 @@ function wait_for_services() {
     
     # Check Redis
     for i in {1..30}; do
-        if docker exec resume-agent-redis-dev redis-cli ping > /dev/null 2>&1; then
+        if docker exec data-sovereignty-redis-dev redis-cli ping > /dev/null 2>&1; then
             echo -e "${GREEN}✅ Redis is ready${NC}"
             break
         fi
@@ -73,7 +73,7 @@ function run_unit_tests() {
     print_header "🧪 Running Unit Tests"
     
     echo -e "${YELLOW}Running unit tests in Docker container...${NC}"
-    docker exec -it resume-agent-web-ui-dev npm test
+    docker exec -it data-sovereignty-web-ui-dev npm test
     
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}✅ Unit tests passed${NC}"
@@ -88,7 +88,7 @@ function run_unit_tests_coverage() {
     print_header "📊 Running Unit Tests with Coverage"
     
     echo -e "${YELLOW}Running unit tests with coverage...${NC}"
-    docker exec -it resume-agent-web-ui-dev npm run test:unit:coverage
+    docker exec -it data-sovereignty-web-ui-dev npm run test:unit:coverage
     
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}✅ Coverage report generated${NC}"
@@ -104,7 +104,7 @@ function run_e2e_tests() {
     print_header "🔬 Running E2E Tests"
     
     echo -e "${YELLOW}Running E2E tests in Docker container...${NC}"
-    docker exec -it resume-agent-web-ui-dev npm run test:int
+    docker exec -it data-sovereignty-web-ui-dev npm run test:int
     
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}✅ E2E tests passed${NC}"
@@ -119,7 +119,7 @@ function initialize_database() {
     print_header "🗄️ Initializing Database"
     
     echo -e "${YELLOW}Initializing database schema...${NC}"
-    docker exec -it resume-agent-web-ui-dev npm run db:init
+    docker exec -it data-sovereignty-web-ui-dev npm run db:init
     
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}✅ Database initialized${NC}"

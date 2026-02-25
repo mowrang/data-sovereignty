@@ -10,7 +10,7 @@ echo "Fixing PostgreSQL Permissions"
 echo "=========================================="
 echo ""
 
-CONTAINER_NAME="resume-agent-postgres-dev"
+CONTAINER_NAME="data-sovereignty-postgres-dev"
 DB_NAME="langgraph_dev"
 DB_USER="langgraph"
 

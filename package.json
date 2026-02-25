@@ -1,7 +1,7 @@
 {
-  "name": "social-media-agent",
+  "name": "data-sovereignty",
   "version": "0.0.1",
-  "description": "Social Media Agent – Resume agent and social media workflow.",
+  "description": "Data Sovereignty Platform – Resume optimization and job recommendations with multi-user support.",
   "main": "my_app/graph.ts",
   "author": "Your Name",
   "license": "MIT",

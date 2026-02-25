@@ -1,6 +1,6 @@
-# Social Media Agent
+# Data Sovereignty Platform
 
-This repository contains an 'agent' which can take in a URL, and generate a Twitter & LinkedIn post based on the content of the URL. It uses a human-in-the-loop (HITL) flow to handle authentication with different social media platforms, and to allow the user to make changes, or accept/reject the generated post.
+This repository contains a multi-user platform for resume optimization and job recommendations. Users can connect their data sources (Google Docs, Microsoft OneDrive, local files), configure their preferred AI provider, and get personalized job recommendations based on their application history. The platform uses LangGraph for AI agent workflows and supports multiple data sources through a scalable architecture.
 
 ![Screenshot of the social media agent flow](./static/agent_flow.png)
 
