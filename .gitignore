@@ -45,3 +45,9 @@ coverage/
 docker-build.log
 output.txt
 *.tmp
+
+# Prevent committing files with real secrets (use placeholders in docs)
+# Note: This won't remove secrets already in git history
+*secrets*.md
+*credentials*.md
+*keys*.md
